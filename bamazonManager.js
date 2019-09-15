@@ -131,6 +131,7 @@ var addProduct = function(){
         connection.query("INSERT INTO products (product_name,department_name,price,stock_quantity) VALUES (?,?,?,?)",[ans.item,ans.department,ans.price,ans.quantity],function(err,res){
             if(err) throw err;
             console.log("Inserted.");
+            questions();
         })
     })
     
