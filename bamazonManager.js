@@ -28,7 +28,7 @@ connection.connect(function(err) {
         type:"list",
         name:"selection",
         message: "Choose an option below.",
-        choices:["View Products for Sale", "View Low Inventory", "Add Inventory", "Add New Product"]
+        choices:["View Products for Sale", "View Low Inventory", "Add Inventory", "Add New Product","Exit"]
     }).then(function(ans){
         switch(ans.selection){
             case "View Products for Sale":
@@ -42,6 +42,9 @@ connection.connect(function(err) {
                 break;
             case "Add New Product":
                 addProduct();
+                break;
+            case "Exit":
+                connection.end();
                 break;
         }
             
