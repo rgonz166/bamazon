@@ -20,15 +20,11 @@ var connection = mysql.createConnection({
 connection.connect(function(err) {
     if (err) throw err;
     console.log("connected as id " + connection.threadId);
-    // displayProducts();
-    // initQuestions();
-    // updateProduct("department_name","Phones","Phoens");
-    // getQuantity("Samsung Galaxy S10+");
-    // buyProduct("Samsung Galaxy S10+",10);
+    displayProducts();
   });
 
-  function displayProducts(){
-    var query = connection.query("SELECT * FROM products", function(err, res) {
+    var displayProducts = function(){
+    connection.query("SELECT * FROM products", function(err, res) {
         if (err) throw err;
         
         var table = new Table({
@@ -43,38 +39,51 @@ connection.connect(function(err) {
         }
         console.log(table.toString());
         console.log("");
-        // questions();
+        buy();
     });
 }
 
-function questions() {
+function buy() {
     inq.prompt({
-        name: "whatToBuy",
+        name: "product",
         type: "input",
         message: "Enter Product Id of item you wish to purchase."
     }).then(function(ans){
-        buyProduct(ans.whatToBuy);
-    })
-}
-
-function buyProduct(id) {
-    console.log("Buy this product: "+id);
-    
-}
-
-// function buyProduct(iten_name,how_many) {
-//     var quantity = getQuantity(iten_name);
-//     if(quantity>how_many){
-//         console.log("You can buy");
-//     }
-//     connection.end
-// }
-
-function getQuantity(item_name) {
-    var query = connection.query("SELECT stock_quantity FROM products WHERE product_name=?",[item_name],function(err,res){
-        if(err) throw err;
-        var quantity = res[0].stock_quantity;
-        return quantity;
+        var selected = ans.product;
+        connection.query("SELECT * FROM products WHERE id=?",[selected],function(err,res){
+            if(err) throw err;
+            // Will check if the id selected doesnt exist
+            if(res.length===0){
+                console.log("The id chosen does not exist!");
+                buy();
+            }
+            else{
+                // If it does exist, prompt how many to buy
+                inq.prompt({
+                    name:"amount",
+                    type: "number",
+                    message: "How many would you like to buy?"
+                }).then(function(ans2){
+                    var amount = ans2.amount;
+                    var stockId = res[0].id;
+                    var inStock = res[0].stock_quantity;
+                    var stockName = res[0].product_name;
+                    var stockPrice = res[0].price;
+                    var newAmount = inStock - amount;
+                    if(amount > inStock){
+                        console.log("Sorry we only have "+inStock+" of "+stockName+" in stock.");
+                        buy();
+                    }else{
+                        console.log("You are buying "+amount+" "+stockName+" at $"+stockPrice+" each.");
+                        connection.query("UPDATE products SET stock_quantity=? WHERE id=?",[newAmount,stockId],function(error,results){
+                            if(error) throw error;
+                            console.log("Thank you for your purchase!");
+                        });
+                        connection.end;
+                    }
+                })
+            }
+        })
     })
 }
 
@@ -85,4 +94,3 @@ function updateProduct(updateWhat, updateThis, removeThis){
     });
     connection.end;
 }
-displayProducts();
