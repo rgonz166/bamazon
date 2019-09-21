@@ -2,6 +2,8 @@
 ## What is Bamazon?
 Bamazon is an e-commerce app that has the functionality of buying items as a customer and restocking and adding products as a manager. This uses node with the `mysql`,`inquirer`, and `cli-table2` npm modules.
 
+To view what I learned scroll down or [click here](#what-i-learned)
+
 ## How to use it
 Make sure you have [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) and [node](https://nodejs.org/en/) installed.
 
@@ -28,11 +30,11 @@ To run the customer side run: `node bamazonCustomer.js`
 To run the manager side run: `node bamazonManager.js`
 
 There are 5 options to choose from:
-1. View Products for Sale
-2. View Low Inventory
-3. Add Inventory
-4. Add New Product
-5. Exit
+1. [View Products for Sale](#view-products-for-sale)
+2. [View Low Inventory](#view-low-inventory)
+3. [Add Inventory](#add-inventory)
+4. [Add New Product](#add-new-product)
+5. [Exit](#exit)
 
 ### View Products for Sale
 This will display a full list of all the available items for sale.
